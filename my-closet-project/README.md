@@ -1,7 +1,12 @@
-# Vue 3 + Vite
+# 나의 옷장 웹앱
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+사진에서 원하는 위치에 버튼을 생성하여 상세정보를 입력할 수 있고 카테고리별로 모아서 검색할 수 있다.
 
-## Recommended IDE Setup
+## Requirements
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+- Vue 3
+- Vuex 4
+- Bootstrap 5
+- Vite
+- scss
+- awesome font
