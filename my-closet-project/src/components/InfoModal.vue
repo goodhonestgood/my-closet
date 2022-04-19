@@ -3,7 +3,7 @@
         <div class="ConfirmModal" v-show="modalActive">
             <transition name="modal-animation-inner">
                 <div v-show="modalActive" class="modal-inner">
-                    <i @click="close" class="far fa-times-circle"></i>
+                    <i @click.stop="close" class="far fa-times-circle"></i>
                     <!--modal content-->
                     <h4 class="mb-4">정보</h4>
                     <slot/>
@@ -32,8 +32,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     position: fixed;
     top: 0;
     left :0;
@@ -41,7 +41,7 @@ export default {
 
     .modal-inner {
         position: relative;
-        max-width: 540px;
+        max-width: 400px;
         width: 80%;
         box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.1);
         background-color: #fff;
