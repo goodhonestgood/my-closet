@@ -1,52 +1,52 @@
 <template>
     <div class="container">
-        <div v-if="!image">
-        <h5>1. 이미지 불러오기</h5>
+        <div v-if="!src">
+            <h5>1. 이미지 불러오기</h5>
             <input type="file" @change="getImage">
         </div>
-        <div>
-            <canvas ref="root" width="500" height="500"></canvas>
-            <button @click="remove">Remove image</button>
+        <div v-else>
+            <img :src="src" alt=""/>
+            <h5>2. 정사각형 자르기</h5>
+            <canvas ref="root" width="720" height="720"></canvas>
         </div>
-        <h5>2. 정사각형 자르기</h5>
-
-        <h5>3. 정보 입력하기</h5>
+        <!-- <h5>3. 정보 입력하기</h5> -->
     </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onUpdated, ref } from 'vue'
 export default {
     setup() {
         // 이미지 가져오기
+        const src = ref(null)
         const getImage = (event) => {
             let file = event.target.files || event.dataTransfer.files
             if (!file) return
             let reader = new FileReader()
             reader.onload = (e) => {
-                reSize(e.target.result)
+                src.value = e.target.result
             }
             reader.readAsDataURL(file[0])
         }
+
+        // 이미지 리사이즈
         const root = ref(null)
-      
         const reSize = (src) => {
             const ctx = root.value.getContext('2d')
             let image = new Image()
             image.src = src
-            let [ w, h ] = [image.width/4,image.height/4] // 여기 고치기
+            
             image.onload = () => {
-                ctx.drawImage(image, w,h,500,500,0,0,500,500)
+                let [ w, h ] = [image.width/4,image.height/4]
+                ctx.drawImage(image, w,h,2*w,2*w,0,0,720,720)
             }
         }
-        
-        // 이미지 지우기
-        const remove = () => {
-            image.value = null
-        }
-        // 여기부터
 
-        return {getImage, remove, root}
+        onUpdated(()=>{
+            reSize(src.value) // src가 업데이트되면
+        })
+
+        return {getImage, root, src}
     },
 }
 </script>
