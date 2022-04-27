@@ -44,7 +44,8 @@ import { computed, reactive, ref } from 'vue'
 import InfoModal from '../components/InfoModal.vue'
 
 export default {
-    setup() {
+    props: ['imgURL',],
+    setup(props) {
         
         /**임시 저장 */
         let temporary = {
@@ -77,7 +78,7 @@ export default {
         }
 
         /**이미지 불러오기 */
-        const imgurl = ref('https://cdn.shopify.com/s/files/1/0562/4971/2815/files/f19_m1_540x.jpg')
+        const imgurl = (props.imgURL)
         
         /**이미지 위에 버튼 만들기 */
         const boxChilds = reactive([])

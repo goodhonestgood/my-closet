@@ -7,15 +7,20 @@
         <div v-else>
             <img :src="src" alt=""/>
             <h5>2. 정사각형 자르기</h5>
-            <canvas ref="root" width="720" height="720"></canvas>
+            <canvas ref="root" width="500" height="500"></canvas>
         </div>
-        <!-- <h5>3. 정보 입력하기</h5> -->
+        <!-- <h5>3. 정보 입력하기</h5>
+        <addtion v-show="newURL.length>0" :imgURL = "newURL"></addtion> -->
     </div>
 </template>
 
 <script>
+import addtion from './Addition.vue'
 import { onUpdated, ref } from 'vue'
 export default {
+    components: {
+        addtion,
+    },
     setup() {
         // 이미지 가져오기
         const src = ref(null)
@@ -38,15 +43,22 @@ export default {
             
             image.onload = () => {
                 let [ w, h ] = [image.width/4,image.height/4]
-                ctx.drawImage(image, w,h,2*w,2*w,0,0,720,720)
+                ctx.drawImage(image, w,h,2*w,2*w,0,0,500,500)
+                getNewImage()
             }
+        }
+        const newURL = ref('')
+        // 캔버스 데이터
+        const getNewImage = () => {
+            newURL.value = root.value.toDataURL()
+            console.log(newURL.value)
         }
 
         onUpdated(()=>{
             reSize(src.value) // src가 업데이트되면
         })
 
-        return {getImage, root, src}
+        return {getImage, root, src, newURL}
     },
 }
 </script>

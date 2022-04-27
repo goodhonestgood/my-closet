@@ -5,7 +5,8 @@
                 <div v-show="modalActive" class="modal-inner">
                     <i @click.stop="close" class="far fa-times-circle"></i>
                     <!--modal content-->
-                    <h4 class="mb-4">정보</h4>
+                    <h5 class="mb-4">정보 입력하기</h5>
+                    <hr />
                     <slot/>
                 </div>
             </transition>
