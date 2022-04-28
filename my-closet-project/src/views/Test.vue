@@ -1,16 +1,23 @@
 <template>
     <div class="container">
-        <div v-if="!src">
+        <div class="mb-4">
+    <button @click="currentPage = 1" type="button">이미지 불러오기</button>
+    <button v-if="src" @click="currentPage = 2" type="button">정사각형 자르기</button>
+    <button v-if="newURL.length>0" @click="currentPage = 3" type="button">정보 입력하기</button>
+        </div>
+        <div v-if="currentPage === 1">
             <h5>1. 이미지 불러오기</h5>
             <input type="file" @change="getImage">
         </div>
-        <div v-else>
+        <div v-if="currentPage === 2">
             <img :src="src" alt=""/>
             <h5>2. 정사각형 자르기</h5>
             <canvas ref="root" width="500" height="500"></canvas>
         </div>
-        <!-- <h5>3. 정보 입력하기</h5>
-        <addtion v-show="newURL.length>0" :imgURL = "newURL"></addtion> -->
+        <div v-if="currentPage === 3">
+            <h5>3. 정보 입력하기</h5>
+            <addtion v-if="newURL.length>0" :imgURL = "newURL"></addtion>
+        </div>
     </div>
 </template>
 
@@ -22,6 +29,7 @@ export default {
         addtion,
     },
     setup() {
+        let currentPage = ref(1)
         // 이미지 가져오기
         const src = ref(null)
         const getImage = (event) => {
@@ -55,10 +63,12 @@ export default {
         }
 
         onUpdated(()=>{
-            reSize(src.value) // src가 업데이트되면
+            if(currentPage.value === 2) {
+                reSize(src.value) // src가 업데이트되면
+            }
         })
 
-        return {getImage, root, src, newURL}
+        return {getImage, root, src, newURL, currentPage}
     },
 }
 </script>

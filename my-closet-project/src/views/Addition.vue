@@ -1,5 +1,4 @@
 <template>
-<div class="container">
   <div
     id="box"
     @click.self="mouseDown"
@@ -34,8 +33,6 @@
   </div>
   <button class="relative-element btn btn-success" @click="submit">저장</button>
   <p class="relative-element" >{{}}</p>
-</div>
-
 </template>
 
 <script>
@@ -129,7 +126,7 @@ export default {
     position          : relative;
     left              : 50%;
     top               : 0;
-    transform         : translate(-50%,10%);
+    transform         : translate(-50%,0%);
     width             : 500px;
     height            : 500px;
     overflow          : hidden;
@@ -137,7 +134,7 @@ export default {
 
 .relative-element {
 position          : relative;
-top               : 50px;
+top               : 10px;
 left              : 0px;
 transform         : translate(0%,50%);
 overflow          : hidden;
