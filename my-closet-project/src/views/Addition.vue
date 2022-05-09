@@ -69,10 +69,6 @@ export default {
             temporary['hashtags'] = null
             temporary['link'] = null
         }
-        // 여기부터
-        const submit = () => {
-            // tempValues.value 데이터베이스에 넣기
-        }
 
         /**이미지 불러오기 */
         const imgurl = (props.imgURL)
@@ -110,9 +106,17 @@ export default {
             boxChilds.splice(index, 1);
         }
 
-        const categories = reactive(['상의','하의','아우터','악세서리','모자','신발'])
+
+        // 여기부터
+        
+        const submit = () => {
+            // tempValues.value 데이터베이스에 넣기
+            console.log(tempValues.value)
+        }
+
+        const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방'])
         const seasons = reactive(['봄','여름','가을','겨울'])
-        return { tempStore, temporary, seasons, categories, boxChilds, mouseDown, moreInfo, deleteIcon, imgurl, modalActive, toggleModal, toggleModal2 }
+        return { tempStore, temporary, seasons, categories, boxChilds, mouseDown, moreInfo, deleteIcon, imgurl, modalActive, toggleModal, toggleModal2, submit }
 
     },
     components: { InfoModal }
