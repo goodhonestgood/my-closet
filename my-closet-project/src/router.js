@@ -11,7 +11,8 @@ const routes = [
         component: () => import('./views/ToCloset.vue')
     },
     {
-        path: "/Opencloset",
+        path: "/Opencloset/:sort",
+        name: "open",
         component: () => import('./views/Gallery.vue')
     }
 ];

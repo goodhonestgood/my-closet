@@ -1,7 +1,7 @@
 <template>
   <router-link to="/" class="btn fs-2">홈</router-link>
   <router-link to="/Tocloset" class="btn fs-2">옷 추가하기</router-link>
-  <router-link to="/Opencloset" class="btn fs-2">옷장</router-link>
+  <router-link :to="{name:'open', params: {sort: '모두'}}" class="btn fs-2">옷장</router-link>
   <hr />
   <router-view class="opaque"/>
 </template>
