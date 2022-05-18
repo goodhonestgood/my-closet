@@ -1,13 +1,9 @@
-<script>
-
-</script>
-
 <template>
-  <router-link to="/" class="btn fs-3">HOME</router-link>
-  <router-link to="/Tocloset" class="btn fs-2">SEND</router-link>
-  <router-link to="/Opencloset" class="btn fs-2">OPEN</router-link>
+  <router-link to="/" class="btn fs-2">홈</router-link>
+  <router-link to="/Tocloset" class="btn fs-2">옷 추가하기</router-link>
+  <router-link to="/Opencloset" class="btn fs-2">옷장</router-link>
   <hr />
-  <router-view class="opaque" />
+  <router-view class="opaque"/>
 </template>
 
 <style lang="scss">
@@ -27,8 +23,11 @@
   margin-top: 60px;
 }
 .opaque {
+  margin: 0 auto;
   padding: 30px 30px 20px 20px;
   background-color: rgba(255, 255, 255, 0.5);
-  min-height: 720px;
+  width: 100%;
+  min-height: 600px;
+  height: 80%;
 }
 </style>

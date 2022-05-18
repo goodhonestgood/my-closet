@@ -13,7 +13,8 @@
       @dblclick.stop="deleteIcon(index)"
       type="button"
     ></i>
-    <InfoModal class="position-relative" @close="toggleModal2" :modalActive ="modalActive">
+  </div>
+  <InfoModal class="" @close="toggleModal2" :modalActive ="modalActive">
         <div v-for="cate in categories" class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" :value="cate" v-model="temporary.radioCategory">
             <label class="form-check-label">{{cate}}</label>
@@ -30,20 +31,21 @@
         </div>
         <button @click.stop="tempStore" class="btn btn-outline-secondary" type="button" id="button-addon2">임시 저장</button>
     </InfoModal>
-  </div>
   <button class="relative-element btn btn-success" @click="submit">저장</button>
   <p class="relative-element" >{{}}</p>
 </template>
 
 <script>
 
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import InfoModal from '../components/InfoModal.vue'
 
 export default {
     props: ['imgURL',],
     setup(props) {
-        
+        const router = useRouter()
+
         /**임시 저장 */
         let temporary = {
             'radioCategory': null,
@@ -107,11 +109,18 @@ export default {
         }
 
 
-        // 여기부터
-        
+        // 데이터베이스에 입력
         const submit = () => {
-            // tempValues.value 데이터베이스에 넣기
-            console.log(tempValues.value)
+            console.log("데이터베이스에 입력")
+            router.push('/')
+            /*tempValues.value['imgurl'] = imgurl.slice(-10,imgurl.length);
+            fetch("/db/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(tempValues.value)
+            }).then((res)=> console.log(res))*/
         }
 
         const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방'])
@@ -134,6 +143,13 @@ export default {
     width             : 500px;
     height            : 500px;
     overflow          : hidden;
+}
+
+@media ( max-width: 520px ) {
+    #box {
+        width:400px;
+        height:400px;
+    }
 }
 
 .relative-element {

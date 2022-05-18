@@ -1,13 +1,14 @@
 <template>
-    <FilterNav @filter="filtered"/>
     <div class="container">
+        <FilterNav @filter="filtered"/>
         <div v-if="true" class="row">
-            <div class="col-lg-4 col-sm-12 col-md-4 mb-2" v-for="clothe in clothes" >
+            <div class="col-lg-4 col-md-4 col-sm-6 mb-2" v-for="data in clothes[0]" >
                 <div class="card" style="width: 18rem;">
-                    <img :src="clothe.imgsrc" class="card-img-top" alt="...">
+                    <img :src="data.imgurl" class="card-img-top" alt="이미지">
                     <div class="card-body">
-                        <h5 class="card-title">{{clothe.category}}</h5>
-                        <p class="card-text">{{clothe.hashtags}}</p>
+                        <h5 class="card-title">{{data.radioCategory}}</h5>
+                        <p class="card-text">{{data.checkedSeasons}}</p>
+                        <p class="card-text">{{data.hashtags}}</p>
                         <a href="#" class="btn btn-primary">상세</a>
                     </div>
                 </div>
@@ -19,15 +20,38 @@
 
 <script>
 import FilterNav from '../components/FilterNav.vue'
-import { ref, computed } from 'vue'
+import { ref, onUpdated, onMounted } from 'vue'
 export default {
     setup() {
-        const currentPage = ref("all")
-        const clothes = ref([{'category':'상의','seasons':['봄'],'hashtags':['#hashtag'], 'imgsrc': 'https://images.unsplash.com/photo-1583846724527-80ceecb9b80c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8'}])
+        const currentPage = ref("");
+        let clothes = ref([]);
         const filtered = (category) => {
             currentPage.value = category
-            console.log(currentPage.value)
+            /** 데이터베이스 조회하기
+            fetch("/db/getdatas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({'sort':'radioCategory','data':category}),
+            })
+            .then(response => response.json())
+            .then(json => {
+                let temp = [];
+                for(var object in json) {
+                    temp.push(json[object]);
+                };
+                clothes.value = temp;
+            });*/
         }
+
+        onUpdated(()=>{
+            console.log(clothes.value ? clothes.value[0][0] : '검색 결과가 없습니다.')
+        })
+
+        onMounted(()=>{
+            filtered('모두');
+        })
         return {currentPage, clothes, filtered}
     },
     components : {
@@ -38,4 +62,4 @@ export default {
 
 <style scoped>
 
-</style>le
+</style>

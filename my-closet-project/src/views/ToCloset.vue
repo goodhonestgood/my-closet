@@ -1,13 +1,13 @@
 <template>
     <div class="container">
         <div class="mb-4">
-    <button @click="currentPage = 1" type="button" class="btn fs-4" :class="{'btn-primary':currentPage==1}">1</button>
-    <button v-if="src" @click="currentPage = 2" type="button" class="btn fs-4" :class="{'btn-primary':currentPage==2}">2</button>
-    <button v-if="newURL.length>0" @click="currentPage = 3" type="button" class="btn fs-4" :class="{'btn-primary':currentPage==3}">3</button>
+            <button @click="currentPage = 1" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==1}">1</button>
+            <button v-if="src" @click="currentPage = 2" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==2}">2</button>
+            <button v-if="newURL.length>0" @click="currentPage = 3" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==3}">3</button>
         </div>
         <div v-if="currentPage === 1">
             <h5>1. 이미지 불러오기</h5>
-            <input type="file" @change="getImage">
+            <input type="file" @change="getImage" @drop="getImage">
         </div>
         <div v-if="currentPage === 2">
             <img :src="src" alt="" hidden/>
@@ -75,7 +75,7 @@ export default {
 
 <style scoped>
 * {
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 </style>

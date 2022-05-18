@@ -8,7 +8,7 @@ const routes = [
     },
     {
         path: "/Tocloset",
-        component: () => import('./views/Test.vue')
+        component: () => import('./views/ToCloset.vue')
     },
     {
         path: "/Opencloset",
