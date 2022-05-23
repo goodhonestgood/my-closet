@@ -1,8 +1,7 @@
 <template>
-  <router-link to="/" class="btn fs-2">홈</router-link>
-  <router-link to="/Tocloset" class="btn fs-2">옷 추가하기</router-link>
-  <router-link :to="{name:'open', params: {sort: '모두'}}" class="btn fs-2">옷장</router-link>
-  <hr />
+  <router-link to="/" class="btn fs-1">홈</router-link>
+  <router-link to="/Tocloset" class="btn fs-1">옷 추가하기</router-link>
+  <router-link :to="{name:'open', params: {sort: '모두'}}" class="btn fs-1">옷장</router-link>
   <router-view class="opaque"/>
 </template>
 
@@ -23,11 +22,16 @@
   margin-top: 60px;
 }
 .opaque {
-  margin: 0 auto;
-  padding: 30px 30px 20px 20px;
-  background-color: rgba(255, 255, 255, 0.5);
+  margin-top: 20px;
+  padding: 30px 20px 30px 20px;
   width: 100%;
-  min-height: 600px;
-  height: 80%;
+  min-height: 580px;
+}
+.fs-1 {
+  color: #4BAEA0;
+  text-shadow: -1px 0 rgb(251, 222, 160), 0 1px rgb(251, 222, 160), 1px 0 rgb(251, 222, 160), 0 -1px rgb(251, 222, 160);
+}
+.fs-1:hover {
+  color: rgba(75, 174, 160,0.8);
 }
 </style>

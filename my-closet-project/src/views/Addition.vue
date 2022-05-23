@@ -31,8 +31,7 @@
         </div>
         <button @click.stop="tempStore" class="btn btn-outline-secondary" type="button" id="button-addon2">임시 저장</button>
     </InfoModal>
-  <button class="relative-element btn btn-success" @click="submit">저장</button>
-  <p class="relative-element" >{{}}</p>
+  <button class="relative-element btn btn-success mb-3" @click="submit">저장</button>
 </template>
 
 <script>
@@ -58,7 +57,7 @@ export default {
             tempValues.value[curModal.value] = {
                 'radioCategory': temporary.radioCategory,
                 'checkedSeasons': temporary.checkedSeasons,
-                'hashtags': temporary.hashtags,
+                'hashtags': tagToArray(temporary.hashtags),
                 'link': temporary.link,
             }
             console.log(tempValues.value)
@@ -108,12 +107,25 @@ export default {
             boxChilds.splice(index, 1);
         }
 
+        // 문자열로 받은 해시태그를 배열로 바꾼다.
+        const tagToArray = (hashtags) => {
+            if (hashtags.indexOf('#')>=0 && hashtags.indexOf(',')>=0){
+                hashtags = hashtags.replace(/[,\s]*/g, "").split('#').slice(1).map(t=>'#'+t)
+            } else if (hashtags.indexOf('#') >= 0) {
+                hashtags = hashtags.replace(/(\s*)/g, "").split('#').slice(1).map(t=>'#'+t)
+            } else if (hashtags.indexOf(',') >= 0) {
+                hashtags = hashtags.replace(/(\s*)/g, "").split(',').slice(1).map(t=>'#'+t)
+            } else {
+                hashtags = hashtags.split(' ').slice(1).map(t=>'#'+t)
+            }
+            return hashtags
+        }
 
         // 데이터베이스에 입력
         const submit = () => {
             console.log("데이터베이스에 입력")
-            router.push('/')
             /*tempValues.value['imgurl'] = imgurl.slice(-10,imgurl.length);
+            tempValues.value['imgsize'] = document.documentElement.scrollWidth <= 520 ? false : true; // 서버에서 imgSize가 false이면 좌표의 비율을 조정한다.
             fetch("/db/save", {
                 method: "POST",
                 headers: {
@@ -121,6 +133,7 @@ export default {
                 },
                 body: JSON.stringify(tempValues.value)
             }).then((res)=> console.log(res))*/
+            router.push('/')
         }
 
         const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방'])

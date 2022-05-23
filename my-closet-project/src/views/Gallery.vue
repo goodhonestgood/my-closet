@@ -1,14 +1,14 @@
 <template>
     <div class="container">
       <div class="mt-1 mb-3">
-        <ul class="nav justify-content-center text-dark">
+        <ul class="nav justify-content-center">
           <li v-for="value in clickStyle" class="nav-item">
-            <button class="nav-link btn fs-4" :class="{ 'text-success' : value == currentPage }" @click="filtered(value)"> {{value}} </button>
+            <button class="nav-link btn fs-4" :class="{ 'clicked' : value == currentPage }" @click="filtered(value)"> {{value}} </button>
           </li>
         </ul>
       </div>
         <div v-if="Object.keys(clothes).length>0" class="row">
-            <div class="col-lg-4 col-md-6 col-sm-6 mb-2" v-for="(value,key) in clothes" >
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-2" v-for="(value,key) in clothes" >
                 <div class="card" style="width: 300px;">
                     <div
                         id="card-img-top"
@@ -26,13 +26,16 @@
                         ></i>
                     </div>
                     <div class="card-body">
-                        <p class="card-text"><span v-for="li in value">{{li.hashtags}}&nbsp;</span></p>                    </div>
+                        <p class="card-text">&nbsp;<span v-for="each in value"><span v-for="tag in each.hashtags">{{tag}}&nbsp;</span></span></p>                    </div>
                 </div>
             </div>
         </div>
         <div v-else> 없습니다 </div>
-        <InfoModal class="" @close="toggleModal" :modalActive ="modalActive">
-            <p class="fs-4 difont" v-for="(info,key) in curModal">{{info}}</p>
+        <InfoModal v-if="curModal !== null"  @close="toggleModal" :modalActive ="modalActive">
+            <p class="fs-5 difont">{{curModal.radioCategory}}</p>
+            <p class="fs-5 difont"><a :href="curModal.link">{{curModal.link.slice(0,10)}}<span v-if="curModal.link.length>10">...</span></a></p>
+            <p class="fs-5 difont"><span style="background-color:beige;" v-for="(each,idx) in curModal.checkedSeasons">{{each}}<span v-if="idx !== curModal.checkedSeasons.length-1">,&nbsp;</span></span></p>
+            <p class="fs-5 difont"><span style="background-color:beige;" v-for="tag in curModal.hashtags">{{tag}}&nbsp;</span></p>
         </InfoModal>
     </div>
 </template>
@@ -119,12 +122,31 @@ export default {
 </script>
 
 <style scoped>
-
+.container {
+    border: dashed 5px #4BAEA0;
+}
 .difont {
 font-family: Avenir, Helvetica, Arial, sans-serif;
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 text-align: center;
 color: black;
+}
+
+button {
+    color: #F0C9C9;
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+button:hover {
+    color: rgba(240, 201, 201, 0.9)
+}
+
+.clicked {
+    color: #B6E6BD;
+}
+
+div.row {
+    margin: 0 auto;
 }
 </style>

@@ -1,21 +1,17 @@
 <template>
     <div class="container">
         <div class="mb-4">
-            <button @click="currentPage = 1" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==1}">1</button>
-            <button v-if="src" @click="currentPage = 2" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==2}">2</button>
-            <button v-if="newURL.length>0" @click="currentPage = 3" type="button" class="btn fs-5" :class="{'btn-primary':currentPage==3}">3</button>
+            <button @click="currentPage = 1" type="button" class="btn fs-4" :class="{'btnColor':currentPage==1}">1. 이미지 불러오기</button>
+            <button v-if="src" @click="currentPage = 2" type="button" class="btn fs-4" :class="{'btnColor':currentPage==2}">2. 정사각형 자르기</button>
+            <button v-if="newURL.length>0" @click="currentPage = 3" type="button" class="btn fs-4" :class="{'btnColor':currentPage==3}">3. 정보 입력하기</button>
         </div>
         <div v-if="currentPage === 1">
-            <h5>1. 이미지 불러오기</h5>
             <input type="file" @change="getImage" @drop="getImage">
         </div>
         <div v-if="currentPage === 2">
-            <img :src="src" alt="" hidden/>
-            <h5>2. 정사각형 자르기</h5>
-            <canvas ref="root" width="500" height="500"></canvas>
+            <canvas class="mx-auto" ref="root" width="500" height="500"></canvas>
         </div>
         <div v-if="currentPage === 3">
-            <h5>3. 정보 입력하기</h5>
             <addtion v-if="newURL.length>0" :imgURL = "newURL"></addtion>
         </div>
     </div>
@@ -76,6 +72,13 @@ export default {
 <style scoped>
 * {
     font-size: 1.1em;
+}
+.container {
+    border: dashed 5px #4BAEA0;
+}
+.btnColor {
+    color: #F0C9C9;
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 
 </style>
