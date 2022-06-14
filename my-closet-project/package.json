@@ -9,6 +9,7 @@
     "compile:sass": "sass scss:src/assets/css"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "bootstrap": "^5.1.3",
     "sass": "^1.50.0",
     "vue": "^3.2.25",

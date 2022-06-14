@@ -36,9 +36,10 @@
 
 <script>
 
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import InfoModal from '../components/InfoModal.vue'
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import InfoModal from '../components/InfoModal.vue';
 
 export default {
     props: ['imgURL',],
@@ -51,99 +52,114 @@ export default {
             'checkedSeasons': [],
             'hashtags': null,
             'link': null,
-        }
-        const tempValues = ref({})
+        };
+        const tempValues = ref({});
         const tempStore = () => {
             tempValues.value[curModal.value] = {
                 'radioCategory': temporary.radioCategory,
                 'checkedSeasons': temporary.checkedSeasons,
                 'hashtags': tagToArray(temporary.hashtags),
                 'link': temporary.link,
-            }
-            console.log(tempValues.value)
-            toggleModal2()
-        }
+            };
+            console.log(tempValues.value);
+            toggleModal2();
+        };
         const initTemp = () => {
             // 초기화
-            temporary['radioCategory'] = null
-            temporary['checkedSeasons'] = []
-            temporary['hashtags'] = null
-            temporary['link'] = null
-        }
+            temporary['radioCategory'] = null;
+            temporary['checkedSeasons'] = [];
+            temporary['hashtags'] = null;
+            temporary['link'] = null;
+        };
 
         /**이미지 불러오기 */
-        const imgurl = (props.imgURL)
+        const imgurl = props.imgURL;
         
         /**이미지 위에 버튼 만들기 */
-        const boxChilds = reactive([])
+        const boxChilds = reactive([]);
         const mouseDown = (e) => {
-            console.log('mousedown')
             if (boxChilds.length > 7) return;
             const childStyle = { 
                 left            : e.offsetX + 'px',
                 top             : e.offsetY + 'px',
             }
-            boxChilds.push(childStyle)
-            moreInfo(boxChilds[boxChilds.length-1])
+            boxChilds.push(childStyle);
+            moreInfo(boxChilds[boxChilds.length-1]);
         }
 
         /**modal 관련 */
-        let modalActive = ref(false)
+        let modalActive = ref(false);
         const toggleModal = () => {
-            modalActive.value = !modalActive.value
-            console.log(modalActive.value)
-        }
+            modalActive.value = !modalActive.value;
+            console.log(modalActive.value);
+        };
         const toggleModal2 = () => {
-            initTemp()
-            toggleModal()
-        }
-        let curModal = ref(null)
+            initTemp();
+            toggleModal();
+        };
+        let curModal = ref(null);
         const moreInfo = (each) => {
-            console.log('moreInfo: ',[each.top, each.left])
-            curModal.value = [each.top, each.left]
-            toggleModal()
-        }
+            console.log('위치: ',[each.top, each.left]);
+            curModal.value = [each.top, each.left];
+            toggleModal();
+        };
         const deleteIcon = (index) => {
             boxChilds.splice(index, 1);
         }
 
         // 문자열로 받은 해시태그를 배열로 바꾼다.
         const tagToArray = (hashtags) => {
+            if (hashtags === null) return [];
             if (hashtags.indexOf('#')>=0 && hashtags.indexOf(',')>=0){
-                hashtags = hashtags.replace(/[,\s]*/g, "").split('#').slice(1).map(t=>'#'+t)
+                hashtags = hashtags.replace(/[,\s]*/g, "").split('#').slice(1).map(t=>'#'+t);
             } else if (hashtags.indexOf('#') >= 0) {
-                hashtags = hashtags.replace(/(\s*)/g, "").split('#').slice(1).map(t=>'#'+t)
+                hashtags = hashtags.replace(/(\s*)/g, "").split('#').slice(1).map(t=>'#'+t);
             } else if (hashtags.indexOf(',') >= 0) {
-                hashtags = hashtags.replace(/(\s*)/g, "").split(',').slice(1).map(t=>'#'+t)
+                hashtags = hashtags.replace(/^,|\s*/g, "").split(',').map(t=>'#'+t);
             } else {
-                hashtags = hashtags.split(' ').slice(1).map(t=>'#'+t)
+                hashtags = hashtags.split(' ').slice(1).map(t=>'#'+t);
             }
-            return hashtags
+            return hashtags;
+        };
+        // 여기
+        const canvasToImg = () => {
+            
         }
-
         // 데이터베이스에 입력
-        const submit = () => {
-            console.log("데이터베이스에 입력")
-            /*tempValues.value['imgurl'] = imgurl.slice(-10,imgurl.length);
-            tempValues.value['imgsize'] = document.documentElement.scrollWidth <= 520 ? false : true; // 서버에서 imgSize가 false이면 좌표의 비율을 조정한다.
-            fetch("/db/save", {
-                method: "POST",
+        const submit = async () => {
+            console.log("데이터베이스에 입력");
+            const decodImg = window.atob(imgurl.split(',')[1]);
+            let array = [];
+            for (let i = 0; i < decodImg .length; i++) {
+                array.push(decodImg .charCodeAt(i));
+            }
+            const file = new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+            const fileName = 'canvas_img_' + new Date().getMilliseconds() + '.jpg';
+            
+            const formData = new FormData();
+            formData.append('file', file, fileName);
+            formData.append('imgSize',document.documentElement.scrollWidth <= 520 ? false : true);
+            formData.append('alldata',JSON.stringify(tempValues.value));
+
+            await axios.post('http://localhost:8081/datas/upload/', formData, {
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type':'multipart/form-data'
                 },
-                body: JSON.stringify(tempValues.value)
-            }).then((res)=> console.log(res))*/
-            router.push('/')
+                processData: false,
+            }).then((res)=> console.log(res))
+            .catch((err)=> console.log(err));
+
+            router.push('/');
         }
 
-        const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방'])
-        const seasons = reactive(['봄','여름','가을','겨울'])
-        return { tempStore, temporary, seasons, categories, boxChilds, mouseDown, moreInfo, deleteIcon, imgurl, modalActive, toggleModal, toggleModal2, submit }
+        const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방']);
+        const seasons = reactive(['봄','여름','가을','겨울']);
+        return { tempStore, temporary, seasons, categories, boxChilds, mouseDown, moreInfo, deleteIcon, imgurl, modalActive, toggleModal, toggleModal2, submit };
 
     },
     components: { InfoModal }
     
-}
+};
 
 </script>
 

@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 export default {
   setup(props, {emit}) {
@@ -22,16 +22,16 @@ export default {
         '가방' : false,
         '신발' : false,
         '악세서리' : false,
-    })
-    let curType = '모두'
+    });
+    let curType = '모두';
 
     const typeClick = (type) => {
         clickStyle.value[curType] = false
         clickStyle.value[type] = true
         curType = type
         emit('filter', curType)
-    }
-    return { typeClick, clickStyle }
+    };
+    return { typeClick, clickStyle };
   },
 }
 </script>

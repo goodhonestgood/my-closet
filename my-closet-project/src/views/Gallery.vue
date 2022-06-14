@@ -7,18 +7,18 @@
           </li>
         </ul>
       </div>
-        <div v-if="Object.keys(clothes).length>0" class="row">
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-2" v-for="(value,key) in clothes" >
+        <div v-if="clothes.length>0" class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-2" v-for="cloth in clothes" >
                 <div class="card" style="width: 300px;">
                     <div
                         id="card-img-top"
                         class=""
                         @click.self="mouseDown"
                     >   
-                        <img :src="key" alt="이미지" style="max-width:300px;"/>
+                        <img :src="cloth.imgsrc" alt="이미지" style="max-width:300px;"/>
                         <i
                         class ="position-absolute translate-middle far fa-solid fa-magnifying-glass-plus"
-                        v-for ="(each, index) in value"
+                        v-for ="(each, index) in cloth.points"
                         :key  ="index"
                         :style="{top:fiveToThree(each.xy[1])+'px',left:fiveToThree(each.xy[0])+'px'}"
                         @click.stop="moreInfo(each)"
@@ -26,10 +26,11 @@
                         ></i>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">&nbsp;<span v-for="each in value"><span v-for="tag in each.hashtags">{{tag}}&nbsp;</span></span></p>                    </div>
+                        <p class="card-text">&nbsp;<span v-for="each in cloth.points"><span v-for="tag in each.hashtags">{{tag}}&nbsp;</span></span></p>                    </div>
                 </div>
             </div>
         </div>
+
         <div v-else> 없습니다 </div>
         <InfoModal v-if="curModal !== null"  @close="toggleModal" :modalActive ="modalActive">
             <p class="fs-5 difont">{{curModal.radioCategory}}</p>
@@ -41,84 +42,59 @@
 </template>
 
 <script>
-import { ref, onUpdated, computed } from 'vue';
+import { ref, onUpdated, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
 
 import InfoModal from '../components/InfoModal.vue';
-import data from '../assets/data.json';
+
 export default {
     components: { InfoModal },
     setup() {
-        const router = useRouter()
-        const route = useRoute()
-        const clothes = computed(()=>{
-            let datas = data.data;
-            if (currentPage.value === "모두") return datas;
-            let temp = {};
-            for(let d in datas) {
-                for(let i = 0; i < datas[d].length; i++) {
-                    if (datas[d][i].radioCategory === currentPage.value){
-                        temp[d] = datas[d];
-                        break;
-                    }
-                }
-            }
-            console.log(currentPage.value+'는 ', temp)
-            return temp;
-        })
+        const router = useRouter();
+        const route = useRoute();
+        const clothes = ref([]);
 
         /**현재 카테고리 */
-        let currentPage = computed(()=>route.params.sort)
-        let clickStyle = ref(['모두','아웃웨어','드레스','상의','하의','모자','가방','신발','악세서리'])
+        let currentPage = computed(()=>route.params.sort);
+        let clickStyle = ref(['모두','아웃웨어','드레스','상의','하의','모자','가방','신발','악세서리']);
         const filtered = (category) => {
-          router.push({name:'open', params: {'sort':category}})
-        }
+            getdatas(category);
+            router.push({name:'open', params: {'sort':category}});
+        };
         
         /**modal 관련 */
-        let modalActive = ref(false)
+        let modalActive = ref(false);
         const toggleModal = () => {
-            modalActive.value = !modalActive.value
-            console.log(modalActive.value)
+            modalActive.value = !modalActive.value;
+            console.log(modalActive.value);
         }
-        let curModal = ref(null)
+        let curModal = ref(null);
         const moreInfo = (each) => {
-            console.log('moreInfo: ',[each.xy[1], each.xy[0]])
-            curModal.value = each
-            toggleModal()
+            console.log('moreInfo: ',[each.xy[1], each.xy[0]]);
+            curModal.value = each;
+            toggleModal();
         }
 
 
         const fiveToThree = (number) => {
             number = number.slice(0,-2);
-            return number*3/5
-        }
+            return number*3/5;
+        };
 
-        onUpdated(()=>{
-            console.log(currentPage.value)
-            console.log(clothes.value)
-            if (clothes.value.length>0) {
-              console.log(clothes.value[0])
-            }
-            /** currentPage가 바뀔 때 데이터베이스 조회하기
-            fetch("/db/getdatas", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({'sort':'radioCategory','data':category}),
-            })
-            .then(response => response.json())
-            .then(json => {
-                let temp = [];
-                for(var object in json) {
-                    temp.push(json[object]);
-                };
-                clothes.value = temp;
-            });*/
-        })
-        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal}
+
+        const getdatas = async (cate) => {
+            const sort = { radioCategory : cate };
+            const res = await axios.post('http://localhost:8081/datas', sort);
+            clothes.value = res.data;
+        };
+        
+        onMounted(()=>{
+            getdatas(route.params.sort);
+        });
+        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal};
     }
-}
+};
 </script>
 
 <style scoped>

@@ -19,9 +19,9 @@ export default {
     setup(props, {emit}) {
         const close = () => {
             emit('close')
-        }
+        };
 
-        return {close}
+        return {close};
     }
 }
 </script>

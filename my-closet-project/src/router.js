@@ -14,6 +14,10 @@ const routes = [
         path: "/Opencloset/:sort",
         name: "open",
         component: () => import('./views/Gallery.vue')
+    },
+    {
+        path: "/test",
+        component: () => import('./views/Test copy.vue')
     }
 ];
 
