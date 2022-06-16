@@ -15,7 +15,7 @@
                         class=""
                         @click.self="mouseDown"
                     >   
-                        <img :src="cloth.imgsrc" alt="이미지" style="max-width:300px;"/>
+                        <img :src="'data:image/jpeg;base64,'+ cloth.imgsrc" alt="이미지" style="max-width:300px;"/>
                         <i
                         class ="position-absolute translate-middle far fa-solid fa-magnifying-glass-plus"
                         v-for ="(each, index) in cloth.points"

@@ -18,12 +18,15 @@
 </template>
 
 <script>
-import addtion from './Addition.vue';
+
 import { onUpdated, ref } from 'vue';
+import addtion from './Addition.vue';
+import test from './Test copy.vue';
 
 export default {
     components: {
         addtion,
+        test,
     },
     setup() {
         let currentPage = ref(1);
