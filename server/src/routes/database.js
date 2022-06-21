@@ -1,5 +1,5 @@
 const config = require('./config');
-const { MongoClient, ServerApiVersion, GridFSBucket } = require('mongodb');
+const { MongoClient, ServerApiVersion, GridFSBucket, ObjectId } = require('mongodb');
 const router = require('express').Router();
 const multer =require('multer');
 const {GridFsStorage} = require('multer-gridfs-storage');
@@ -50,7 +50,7 @@ router.post('/', (req,res)=>{
         let imageBucket = db.collection("imageBucket.chunks");
         let send_data = results;
         for(let i = 0; i < results.length; i++) {
-            const cursor = imageBucket.find({files_id:results[i].imgsrc});
+            const cursor = imageBucket.find({files_id:results[i].files_id});
             for await (const doc of cursor) {
                 send_data[i].imgsrc = doc.data;
             }
@@ -60,13 +60,13 @@ router.post('/', (req,res)=>{
 })
 
 router.post("/upload", upload.single("file"), (req, res) => {
-    console.log(req.file.id)
+    console.log(req.file.id);
     const datas = {
-        imgsrc: req.file.id,
+        files_id: req.file.id,
         points: []
-    }
+    };
 
-    const req_datas = JSON.parse(req.body.alldata)
+    const req_datas = JSON.parse(req.body.alldata);
     for(const key in req_datas) {
         datas.points.push({
             xy: key.split(','),
@@ -74,41 +74,43 @@ router.post("/upload", upload.single("file"), (req, res) => {
             radioCategory: req_datas[key].radioCategory,
             hashtags: req_datas[key].hashtags,
             link: req_datas[key].link
-        })
-    }
+        });
+    };
 
-    console.log(datas)
+    console.log(datas);
     
     const collection = db.collection("closet_data");
-    collection.insertOne(datas, function (err, results) {
+    collection.insertOne(datas, (err, results) => {
         if (err) {
-          console.log(err)
-          res.send('')
-          return
-        }
-    })
+          console.log(err);
+          res.send('');
+          return;
+        };
+    });
 
     res.status(200)
       .send("File uploaded successfully");
 });
 
+router.post('/delete', (req,res) => {
+    var objId = req.body.files_id;
+    bucket.delete(ObjectId(objId), (err) => {
+        if(err) {
+            console.log(err);
+            res.send('');
+            return;
+        }
+    });
+    const collection = db.collection("closet_data");
+    collection.deleteOne({"files_id": ObjectId(objId)},(err) => {
+        if(err) {
+            console.log(err);
+            res.send('');
+            return;
+        }
+    })
+
+    res.status(200)
+      .send("Deleted successfully");
+});
 module.exports = router;
-
-
-/* 여러개 insert
-db.closet_data.insertMany([
-    {
-        imgsrc:"https://images.unsplash.com/photo-1602832339346-f7501f06e09a",
-        points: [
-            {
-                "xy":["250px","260px"],
-                "checkedSeasons":["봄","여름"],
-                "radioCategory":"상의",
-                "hashtags":["#white","#편하게"],
-                "link":"www.naver.com"
-            }
-        ]
-    },
-])
-
-db.closet_data.find({"points":{"$elemMatch":{"radioCategory":"신발"}}})*/

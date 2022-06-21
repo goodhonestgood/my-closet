@@ -77,9 +77,6 @@ export default {
 * {
     font-size: 1.1em;
 }
-.container {
-    border: dashed 5px #4BAEA0;
-}
 .btnColor {
     color: #F0C9C9;
     text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;

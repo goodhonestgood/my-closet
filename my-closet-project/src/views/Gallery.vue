@@ -26,7 +26,9 @@
                         ></i>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">&nbsp;<span v-for="each in cloth.points"><span v-for="tag in each.hashtags">{{tag}}&nbsp;</span></span></p>                    </div>
+                        <div class="card-text">&nbsp;<span v-for="each in cloth.points"><span v-for="tag in each.hashtags">{{tag}}&nbsp;</span></span></div>
+                        <div><button @click="removing(cloth.files_id)">remove</button></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,25 +84,27 @@ export default {
             return number*3/5;
         };
 
+        const removing = async (files_id) => {
+            const res = await axios.post('http://localhost:8081/datas/delete', {files_id});
+            if(res.data !== '') router.go(); // 새로고침
+        }
 
         const getdatas = async (cate) => {
             const sort = { radioCategory : cate };
             const res = await axios.post('http://localhost:8081/datas', sort);
             clothes.value = res.data;
+            console.log(clothes.value)
         };
         
         onMounted(()=>{
             getdatas(route.params.sort);
         });
-        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal};
+        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal, removing};
     }
 };
 </script>
 
 <style scoped>
-.container {
-    border: dashed 5px #4BAEA0;
-}
 .difont {
 font-family: Avenir, Helvetica, Arial, sans-serif;
 -webkit-font-smoothing: antialiased;

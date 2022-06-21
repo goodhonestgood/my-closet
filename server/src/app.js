@@ -12,8 +12,8 @@ app.use(bodyParser.json())
 app.use(cors())
 
 // Route
-const findData = require('./routes/findData')
-app.use('/datas', findData);
+const db = require('./routes/database')
+app.use('/datas', db);
 
 app.get('/',(req,res,next)=>{
     res.send('hello')
