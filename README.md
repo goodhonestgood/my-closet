@@ -13,7 +13,8 @@
 
 ## 3. 프로젝트 결과물
 
-[결과 웹사이트](..){:target="_blank"}
+- 프론트엔드 - my-closet-project
+- 백엔드 - server
 
 기능
 
