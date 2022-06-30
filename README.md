@@ -9,7 +9,8 @@
 ## 2. 프로젝트 정보
 
 - Vue.js 프레임워크를 사용하여 웹사이트를 구현하였다.
-- Vue 3 / Vite
+- MongoDB와 연결하여 옷 데이터 입력과 검색을 구현하였다.
+- Vue 3 / Express / MongoDB atlas
 
 ## 3. 프로젝트 결과물
 
