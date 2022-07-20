@@ -5,7 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  publicPath: '/my-closet',
+  baseURL: '/my-closet',
   outputDir: 'docs',
   devServer: {
     proxy: {
