@@ -5,8 +5,8 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  outDir: './docs',
-  base:'./',
+  outDir: 'docs',
+  base:'/my-closet/',
   devServer: {
     proxy: {
       '/': {
