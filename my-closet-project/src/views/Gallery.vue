@@ -9,18 +9,18 @@
       </div>
         <div v-if="clothes.length>0" class="row">
             <div class="col-lg-4 col-md-6 col-sm-12 mb-2" v-for="cloth in clothes" >
-                <div class="card" style="width: 300px;">
+                <div class="card">
                     <div
                         id="card-img-top"
                         class=""
                         @click.self="mouseDown"
                     >   
-                        <img :src="'data:image/jpeg;base64,'+ cloth.imgsrc" alt="이미지" style="max-width:300px;"/>
+                        <img :src="cloth.imgsrc" alt="이미지" ref="relateImg"/>
                         <i
                         class ="position-absolute translate-middle far fa-solid fa-magnifying-glass-plus"
                         v-for ="(each, index) in cloth.points"
                         :key  ="index"
-                        :style="{top:fiveToThree(each.xy[1])+'px',left:fiveToThree(each.xy[0])+'px'}"
+                        :style="{top:fiveToThree(each.xy[1], cloth.imgSize)+'px',left:fiveToThree(each.xy[0], cloth.imgSize)+'px'}"
                         @click.stop="moreInfo(each)"
                         type="button"
                         ></i>
@@ -36,7 +36,7 @@
         <div v-else> 없습니다 </div>
         <InfoModal v-if="curModal !== null"  @close="toggleModal" :modalActive ="modalActive">
             <p class="fs-5 difont">{{curModal.radioCategory}}</p>
-            <p class="fs-5 difont"><a :href="curModal.link">{{curModal.link.slice(0,10)}}<span v-if="curModal.link.length>10">...</span></a></p>
+            <p class="fs-5 difont"><a :href="curModal.link">{{curModal.link}}<span v-if="curModal.link">...</span></a></p>
             <p class="fs-5 difont"><span style="background-color:beige;" v-for="(each,idx) in curModal.checkedSeasons">{{each}}<span v-if="idx !== curModal.checkedSeasons.length-1">,&nbsp;</span></span></p>
             <p class="fs-5 difont"><span style="background-color:beige;" v-for="tag in curModal.hashtags">{{tag}}&nbsp;</span></p>
         </InfoModal>
@@ -56,6 +56,7 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const clothes = ref([]);
+        const relateImg = ref(null);
 
         /**현재 카테고리 */
         let currentPage = computed(()=>route.params.sort);
@@ -78,28 +79,33 @@ export default {
             toggleModal();
         }
 
-
-        const fiveToThree = (number) => {
+        /** 이미지 비율 조정 */
+        const fiveToThree = (number, imgSize) => {
             number = number.slice(0,-2);
-            return number*3/5;
+            var size = window.innerWidth;
+            if (size <= 400) return number*300/imgSize;
+            else if (size <= 700) return number*400/imgSize;
+            else return number*300/imgSize;
         };
 
         const removing = async (files_id) => {
-            const res = await axios.post('http://localhost:8081/datas/delete', {files_id});
+            //const res = await axios.post('http://localhost:8081/datas/delete', {files_id});
             if(res.data !== '') router.go(); // 새로고침
         }
 
         const getdatas = async (cate) => {
+            /*
             const sort = { radioCategory : cate };
             const res = await axios.post('http://localhost:8081/datas', sort);
             clothes.value = res.data;
-            console.log(clothes.value)
+            console.log(clothes.value)*/
+            clothes.value = [{"imgSize":500,"imgsrc":"/closest/img.jpg","points":[{"xy":["318px","293px"],"checkedSeasons":["가을","겨울"],"radioCategory":"상의","hashtags":["#red","#니트"],"link":"www.a.com"},{"xy":["365px","15px"],"checkedSeasons":["가을","겨울"],"radioCategory":"모자","hashtags":["#check"],"link":"www.a.com"},{"xy":["433px","357px"],"checkedSeasons":["겨울"],"radioCategory":"아우터","hashtags":["#따듯함"],"link":"www.a.com"}]}]
         };
         
         onMounted(()=>{
             getdatas(route.params.sort);
         });
-        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal, removing};
+        return {currentPage, clothes, filtered, clickStyle, fiveToThree, moreInfo, toggleModal, modalActive, curModal, removing, relateImg};
     }
 };
 </script>
@@ -111,6 +117,27 @@ font-family: Avenir, Helvetica, Arial, sans-serif;
 -moz-osx-font-smoothing: grayscale;
 text-align: center;
 color: black;
+}
+
+@media (max-width: 400px) {
+    .card {
+        width: 300px;
+    }
+}
+@media (min-width: 401px) and (max-width: 700px) {
+    .card {
+        width: 400px;
+    }
+}
+
+@media (min-width: 701px) {
+    .card {
+        width: 300px;
+    }
+}
+
+.card img {
+    width:100%;
 }
 
 button {
@@ -126,7 +153,4 @@ button:hover {
     color: #B6E6BD;
 }
 
-div.row {
-    margin: 0 auto;
-}
 </style>

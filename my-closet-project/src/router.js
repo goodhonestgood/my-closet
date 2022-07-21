@@ -1,24 +1,21 @@
 import { createWebHistory, createRouter } from 'vue-router';
-
+const root = '/closest'
 const routes = [
     {
-        path: "/",
+        path: root+"/",
         name: "Home",
         component: () => import('./views/Home.vue') 
     },
     {
-        path: "/Tocloset",
+        path: root+"/Tocloset",
+        name: "closet",
         component: () => import('./views/ToCloset.vue')
     },
     {
-        path: "/Opencloset/:sort",
+        path: root+"/Opencloset/:sort",
         name: "open",
         component: () => import('./views/Gallery.vue')
     },
-    {
-        path: "/test",
-        component: () => import('./views/Test copy.vue')
-    }
 ];
 
 const router = createRouter({

@@ -134,6 +134,8 @@ export default {
         // 데이터베이스에 입력
         const submit = async () => {
             console.log("데이터베이스에 입력");
+            console.log(window.innerWidth <= 400 ? 300 : window.innerWidth <= 520 ? 400 : 500,tempValues);
+            /*
             console.log(tempValues);
             
             const decodImg = window.atob(imgurl.split(',')[1]);
@@ -146,7 +148,7 @@ export default {
             
             const formData = new FormData();
             formData.append('file', file, fileName);
-            formData.append('imgSize',document.documentElement.scrollWidth <= 520 ? false : true);
+            formData.append('imgSize', window.innerWidth <= 400 ? 300 : window.innerWidth <= 520 ? 400 : 500);
             formData.append('alldata',JSON.stringify(tempValues));
 
             await axios.post('http://localhost:8081/datas/upload/', formData, {
@@ -156,8 +158,8 @@ export default {
                 processData: false,
             }).then((res)=> console.log(res))
             .catch((err)=> console.log(err));
-
-            router.push('/');
+            */
+            router.push({name:'Home'});
         }
 
         const categories = reactive(['상의','하의','드레스','아우터','악세서리','모자','신발','가방']);
@@ -186,6 +188,13 @@ export default {
     #box {
         width:400px;
         height:400px;
+    }
+}
+
+@media ( max-width: 400px ) {
+    #box {
+        width:300px;
+        height:300px;
     }
 }
 

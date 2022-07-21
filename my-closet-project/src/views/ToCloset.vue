@@ -21,15 +21,14 @@
 
 import { onUpdated, ref } from 'vue';
 import addtion from './Addition.vue';
-import test from './Test copy.vue';
 
 export default {
     components: {
         addtion,
-        test,
     },
     setup() {
         let currentPage = ref(1);
+
         // 이미지 가져오기
         const src = ref(null);
         const getImage = (event) => {
@@ -48,7 +47,7 @@ export default {
             const ctx = root.value.getContext('2d');
             let image = new Image();
             image.src = src;
-            
+
             image.onload = () => {
                 let [ w, h ] = [image.width/4,image.height/4];
                 ctx.drawImage(image, w,h,2*w,2*w,0,0,500,500);
@@ -80,6 +79,20 @@ export default {
 .btnColor {
     color: #F0C9C9;
     text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+@media ( max-width: 520px ) {
+    canvas {
+        width:400px;
+        height:400px;
+    }
+}
+
+@media ( max-width: 400px ) {
+    canvas {
+        width:300px;
+        height:300px;
+    }
 }
 
 </style>

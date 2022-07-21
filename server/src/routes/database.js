@@ -63,7 +63,8 @@ router.post("/upload", upload.single("file"), (req, res) => {
     console.log(req.file.id);
     const datas = {
         files_id: req.file.id,
-        points: []
+        points: [],
+        imgSize: req.body.imgSize
     };
 
     const req_datas = JSON.parse(req.body.alldata);
