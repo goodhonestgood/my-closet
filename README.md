@@ -14,7 +14,7 @@
 
 ## 3. 프로젝트 결과물
 
-- 프론트엔드 - my-closet-project <a href="https://goodhonestgood.github.io/closest/Tocloset" target="_blank">프론트엔드만 빌드한 웹사이트</a>
+- 프론트엔드 - my-closet-project <a href="https://goodhonestgood.github.io/closest" target="_blank">프론트엔드만 빌드한 웹사이트</a>
 - 백엔드 - server
 
 기능
